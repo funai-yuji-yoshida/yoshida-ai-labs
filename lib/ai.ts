@@ -18,7 +18,7 @@ export function getGeminiClient(): GoogleGenerativeAI {
 export async function generateText(prompt: string): Promise<string> {
   try {
     const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = client.getGenerativeModel({ model: "gemini-pro" });
 
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -39,7 +39,7 @@ export async function generateHallucinationQuestion(): Promise<{
 }> {
   try {
     const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = client.getGenerativeModel({ model: "gemini-pro" });
 
     // わざと存在しない情報について質問
     const fakeQuestion = "2025年に日本で開催されたAI万博の会場はどこでしたか？";
@@ -68,7 +68,7 @@ export async function testContextLength(
 }> {
   try {
     const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = client.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `以下のテキストを要約してください：\n\n${longText}`;
 
