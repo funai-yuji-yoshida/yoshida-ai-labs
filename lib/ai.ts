@@ -1,30 +1,32 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Anthropic from "@anthropic-ai/sdk";
 
-// Gemini APIクライアントの初期化
-let genAI: GoogleGenerativeAI | null = null;
+// Claude APIクライアントの初期化
+let anthropic: Anthropic | null = null;
 
-export function getGeminiClient(): GoogleGenerativeAI {
-  if (!genAI) {
-    const apiKey = process.env.GEMINI_API_KEY;
+export function getClaudeClient(): Anthropic {
+  if (!anthropic) {
+    const apiKey = process.env.CLAUDE_API_KEY;
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is not set");
+      throw new Error("CLAUDE_API_KEY is not set");
     }
-    genAI = new GoogleGenerativeAI(apiKey);
+    anthropic = new Anthropic({ apiKey });
   }
-  return genAI;
+  return anthropic;
 }
 
 // シンプルなテキスト生成
 export async function generateText(prompt: string): Promise<string> {
   try {
-    const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-pro" });
+    const client = getClaudeClient();
 
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
+    const message = await client.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 1024,
+      messages: [{ role: "user", content: prompt }],
+    });
 
-    return text;
+    const textContent = message.content.find((block) => block.type === "text");
+    return textContent && textContent.type === "text" ? textContent.text : "";
   } catch (error) {
     console.error("AI generation error:", error);
     throw new Error("AI生成に失敗しました");
@@ -38,14 +40,20 @@ export async function generateHallucinationQuestion(): Promise<{
   aiAnswer: string;
 }> {
   try {
-    const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-pro" });
+    const client = getClaudeClient();
 
     // わざと存在しない情報について質問
     const fakeQuestion = "2025年に日本で開催されたAI万博の会場はどこでしたか？";
 
-    const result = await model.generateContent(fakeQuestion);
-    const aiAnswer = result.response.text();
+    const message = await client.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 512,
+      messages: [{ role: "user", content: fakeQuestion }],
+    });
+
+    const textContent = message.content.find((block) => block.type === "text");
+    const aiAnswer =
+      textContent && textContent.type === "text" ? textContent.text : "";
 
     return {
       question: fakeQuestion,
@@ -67,13 +75,19 @@ export async function testContextLength(
   response: string;
 }> {
   try {
-    const client = getGeminiClient();
-    const model = client.getGenerativeModel({ model: "gemini-pro" });
+    const client = getClaudeClient();
 
     const prompt = `以下のテキストを要約してください：\n\n${longText}`;
 
-    const result = await model.generateContent(prompt);
-    const response = result.response.text();
+    const message = await client.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 1024,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const textContent = message.content.find((block) => block.type === "text");
+    const response =
+      textContent && textContent.type === "text" ? textContent.text : "";
 
     return {
       inputLength: longText.length,
