@@ -16,17 +16,20 @@ export default function HomePage() {
 
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
           <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-            まずは、あなた自身の
+            AIの
             <span className="font-bold text-purple-600 dark:text-purple-400">
-              &quot;クセ&quot;
+              ハルシネーション（幻覚）
             </span>
-            を体験してみよう。
+            を実際に体験してみよう。
+          </p>
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mt-4">
+            AIが存在しない情報を自信を持って答えてしまう現象を確認できます。
           </p>
         </div>
 
-        <Link href="/select">
+        <Link href="/ai-experiment/hallucination">
           <Button size="lg" className="text-xl px-12 py-6">
-            体験をはじめる
+            実験をはじめる
           </Button>
         </Link>
       </div>
