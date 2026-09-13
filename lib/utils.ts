@@ -1,4 +1,5 @@
 import { WordResult } from "./types";
+import { matchWithVariants } from "./word-variants";
 
 // 回答を正規化
 export function normalizeAnswer(answer: string): string {
@@ -31,7 +32,7 @@ export function parseAnswers(input: string): string[] {
   return uniqueAnswers;
 }
 
-// 回答を判定
+// 回答を判定（表記ゆれ対応）
 export function evaluateAnswers(
   displayedWords: string[],
   userAnswers: string[],
@@ -42,7 +43,11 @@ export function evaluateAnswers(
 
   return displayedWords.map((word, index) => {
     const normalizedWord = normalizedDisplayed[index];
-    const correct = normalizedAnswers.includes(normalizedWord);
+
+    // 表記ゆれを考慮して一致判定
+    const correct = normalizedAnswers.some((answer) =>
+      matchWithVariants(answer, normalizedWord)
+    );
 
     return {
       word,
