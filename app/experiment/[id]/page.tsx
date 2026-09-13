@@ -393,11 +393,11 @@ function CompletePhase() {
 
       <div className="space-y-4">
         <Button
-          onClick={() => router.push("/coming-soon")}
+          onClick={() => router.push("/ai-experiment/hallucination")}
           size="lg"
           className="w-full"
         >
-          AIのクセを体験する
+          AIのハルシネーションを体験
         </Button>
         <Button
           onClick={() => router.push("/experiment/memory-bias")}

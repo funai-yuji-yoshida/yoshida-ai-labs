@@ -14,15 +14,20 @@ export default function ComingSoonPage() {
         </CardHeader>
         <CardContent className="space-y-6 text-center">
           <p className="text-xl text-gray-700 dark:text-gray-300">
-            AI実験は次のステップで実装します。
+            AIのクセを体験できる実験を用意しました！
           </p>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            これからAIのクセを体験できる実験が追加される予定です。
+            人間の記憶のクセを体験したあとは、AIのクセも確認してみましょう。
           </p>
           <div className="pt-4 space-y-3">
-            <Link href="/experiment/memory-bias">
+            <Link href="/ai-experiment/hallucination">
               <Button size="lg" className="w-full">
-                実験をやり直す
+                AIのハルシネーションを体験
+              </Button>
+            </Link>
+            <Link href="/experiment/memory-bias">
+              <Button variant="secondary" size="lg" className="w-full">
+                記憶の実験をやり直す
               </Button>
             </Link>
             <Link href="/">

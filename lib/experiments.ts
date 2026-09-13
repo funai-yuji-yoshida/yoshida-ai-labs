@@ -9,6 +9,13 @@ export const experiments: ExperimentDefinition[] = [
       "12個の言葉を覚えてください。あなたの記憶にはどんなクセがあるでしょうか？",
     type: "serial-position",
   },
+  {
+    id: "ai-hallucination",
+    name: "AIのハルシネーション",
+    description:
+      "AIは存在しない情報を作り出すことがあります。実際に体験してみましょう。",
+    type: "serial-position", // AI実験用の新しいタイプが必要
+  },
 ];
 
 // 統合実験用の単語セット（系列位置効果 + 孤立効果）

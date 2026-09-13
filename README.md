@@ -1,6 +1,11 @@
-# AIクセ体験ラボ
+# AIクセ体験ラボ（AI使用版）
 
 生成AI講座で使用する体験型Webアプリケーションです。
+
+**このブランチ（`with-ai`）はAI使用版です。**
+
+- AI不使用版: `main`ブランチ
+- AI使用版: `with-ai`ブランチ（このブランチ）
 
 ## アプリ概要
 
@@ -11,12 +16,15 @@
 
 ### 実装済みの実験
 
-- **系列位置効果**：12個の単語を記憶してもらい、最初と最後が覚えやすく、真ん中が忘れやすい傾向を体験
-- **孤立効果**：仲間外れの単語が記憶に残りやすいことを体験
+#### 人間のクセ
+- **記憶のクセ発見実験**：系列位置効果と孤立効果を統合した実験
+
+#### AIのクセ
+- **ハルシネーション実験**：AIが存在しない情報を作り出す現象を体験
 
 ### 今後追加予定
 
-- AI実験（ハルシネーション、バイアス、コンテキスト依存性など）
+- その他のAI実験（コンテキスト長の制限、プロンプト依存性など）
 - 講師モード（参加者全体の結果集計・表示）
 - データベース連携
 
@@ -27,6 +35,7 @@
 - **TypeScript 5**
 - **Tailwind CSS 4**
 - **Recharts 3.10.1** - グラフ表示
+- **@google/generative-ai** - Gemini API
 - **localStorage** - 実験結果の保存（MVP）
 
 ## ローカル起動方法
@@ -42,11 +51,25 @@
 # 依存関係をインストール
 npm install
 
+# 環境変数を設定
+cp .env.local.example .env.local
+# .env.local を編集して GEMINI_API_KEY を設定
+
 # 開発サーバーを起動
 npm run dev
 ```
 
 ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
+
+### 環境変数
+
+`.env.local` ファイルを作成して以下を設定：
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Gemini APIキーは [Google AI Studio](https://makersuite.google.com/app/apikey) で取得できます。
 
 ## ビルド方法
 
