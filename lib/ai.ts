@@ -1,32 +1,31 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
-// Claude APIクライアントの初期化
-let anthropic: Anthropic | null = null;
+// OpenAI APIクライアントの初期化
+let openai: OpenAI | null = null;
 
-export function getClaudeClient(): Anthropic {
-  if (!anthropic) {
-    const apiKey = process.env.CLAUDE_API_KEY;
+export function getOpenAIClient(): OpenAI {
+  if (!openai) {
+    const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      throw new Error("CLAUDE_API_KEY is not set");
+      throw new Error("OPENAI_API_KEY is not set");
     }
-    anthropic = new Anthropic({ apiKey });
+    openai = new OpenAI({ apiKey });
   }
-  return anthropic;
+  return openai;
 }
 
 // シンプルなテキスト生成
 export async function generateText(prompt: string): Promise<string> {
   try {
-    const client = getClaudeClient();
+    const client = getOpenAIClient();
 
-    const message = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 1024,
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
+      max_tokens: 1024,
     });
 
-    const textContent = message.content.find((block) => block.type === "text");
-    return textContent && textContent.type === "text" ? textContent.text : "";
+    return completion.choices[0]?.message?.content || "";
   } catch (error) {
     console.error("AI generation error:", error);
     throw new Error("AI生成に失敗しました");
@@ -40,20 +39,18 @@ export async function generateHallucinationQuestion(): Promise<{
   aiAnswer: string;
 }> {
   try {
-    const client = getClaudeClient();
+    const client = getOpenAIClient();
 
     // わざと存在しない情報について質問
     const fakeQuestion = "2025年に日本で開催されたAI万博の会場はどこでしたか？";
 
-    const message = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 512,
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: fakeQuestion }],
+      max_tokens: 512,
     });
 
-    const textContent = message.content.find((block) => block.type === "text");
-    const aiAnswer =
-      textContent && textContent.type === "text" ? textContent.text : "";
+    const aiAnswer = completion.choices[0]?.message?.content || "";
 
     return {
       question: fakeQuestion,
@@ -75,19 +72,17 @@ export async function testContextLength(
   response: string;
 }> {
   try {
-    const client = getClaudeClient();
+    const client = getOpenAIClient();
 
     const prompt = `以下のテキストを要約してください：\n\n${longText}`;
 
-    const message = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 1024,
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
+      max_tokens: 1024,
     });
 
-    const textContent = message.content.find((block) => block.type === "text");
-    const response =
-      textContent && textContent.type === "text" ? textContent.text : "";
+    const response = completion.choices[0]?.message?.content || "";
 
     return {
       inputLength: longText.length,
