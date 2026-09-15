@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+/* Print styles for PDF export */
+@media print {
+  /* Hide non-printable elements */
+  header,
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+
+  /* Ensure charts don't break across pages */
+  .chart-container,
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Force color printing */
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Adjust background colors for print */
+  .bg-gray-50,
+  .bg-gray-100 {
+    background-color: white !important;
+  }
+}
