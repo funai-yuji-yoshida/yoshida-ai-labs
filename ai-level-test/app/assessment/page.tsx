@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/contexts/AssessmentContext';
 import { Card } from '@/components/ui/Card';
@@ -13,6 +13,11 @@ export default function AssessmentPage() {
   const router = useRouter();
   const { state, setBasicInfo, answerQuestion, nextStep, prevStep, submitAssessment } = useAssessment();
   const [name, setName] = useState('');
+
+  // ステップが変わったらページトップにスクロール
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [state.currentStep]);
 
   const handleSubmitBasicInfo = (e: React.FormEvent) => {
     e.preventDefault();
